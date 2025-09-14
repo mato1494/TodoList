@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react';
 import 'normalize.css';
 import './todo.css'
 
-const today = new Date().toISOString().split('T')[0];
+const today = new Intl.DateTimeFormat('ja-JP', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+}).format(new Date()).replace(/\//g, '-');
 const priorityLabels = {
     high: '高',
     med: '中',
@@ -178,7 +183,9 @@ export default function TodoList() {
                             {filteredTodo.map(item => (
                                 <tr key={item.id} className={item.status === 'completed' ? 'done' : ''}>
                                     <td data-label="タイトル：" className="res-title">{item.title}</td>
-                                    <td data-label="期日：">{new Date(item.date).toLocaleDateString('ja-JP', dateOption)}</td>
+                                    <td data-label="期日：">
+                                        {new Date(item.date).toLocaleDateString('ja-JP', { ...dateOption, timeZone: 'Asia/Tokyo' })}
+                                    </td>
                                     <td data-label="優先度：" className={item.priority === 'high' ? 'high' : ''}>{priorityLabels[item.priority]}</td>
                                     <td data-label="担当者：">{item.pic}</td>
                                     <td data-label="進捗状況：">
